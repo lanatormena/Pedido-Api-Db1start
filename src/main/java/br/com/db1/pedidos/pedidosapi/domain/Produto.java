@@ -1,4 +1,4 @@
-package br.com.db1.pedidosapi.domain;
+package br.com.db1.pedidos.pedidosapi.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,27 +10,30 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "produto")
+@Table(name = "produto")
 public class Produto {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
-	@Column(name = "codigo", length = 50, nullable = false, unique =  true)
+
+	@Column(name = "codigo", length = 50, nullable = false, unique = true)
 	private String codigo;
-	
+
 	@Column(name = "nome", length = 100, nullable = false)
 	private String nome;
-	
-	@Column(name = "valor", precision =16 , nullable = false)
+
+	@Column(name = "valor", precision = 16, nullable = false)
 	private Double valor;
-	
+
 	@Enumerated(EnumType.STRING)
-	@Column(name = "status", length = 30 , nullable = false)
+	@Column(name = "status", length = 30, nullable = false)
 	private StatusProduto status;
 
-	//Construtor
+	protected Produto() {
+	}
+
+	// Construtor
 	public Produto(String codigo, String nome, Double valor) {
 		this.codigo = codigo;
 		this.nome = nome;
@@ -41,6 +44,11 @@ public class Produto {
 	public String getNome() {
 		return nome;
 	}
+	
+	public StatusProduto getStatus() {
+		return status;
+	}
+
 
 	public Double getValor() {
 		return valor;
@@ -49,6 +57,8 @@ public class Produto {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
+	
 
 	public boolean isAtivo() {
 		if (this.status == StatusProduto.ATIVO) {
@@ -64,6 +74,13 @@ public class Produto {
 
 	public void setStatus(StatusProduto status) {
 		this.status = status;
+	}
+
+	public void inativar() {
+		if (!StatusProduto.ATIVO.equals(this.status)) {
+			throw new RuntimeException("Produto está " + this.status);
+		}
+		this.status = StatusProduto.INATIVO;
 	}
 
 }
